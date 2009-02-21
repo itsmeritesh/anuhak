@@ -4,6 +4,13 @@ runtime: python
 api_version: 1
 
 handlers:
-- url: /.*
+- url: /jstest
+  script : jstest.py
+
+- url: /js
+  static_dir: js
+
+
+- url : /.*
   script: index.py
 
