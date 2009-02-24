@@ -7,9 +7,11 @@ handlers:
 - url: /jstest
   script : jstest.py
 
+- url: /cachetest
+  script: cachetest.py
+
 - url: /js
   static_dir: js
-
 
 - url : /.*
   script: index.py
