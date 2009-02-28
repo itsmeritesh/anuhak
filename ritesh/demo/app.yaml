@@ -1,0 +1,30 @@
+application: demo
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /jstest
+  script : jstest.py
+
+- url: /cachetest
+  script: cachetest.py
+
+- url: /client
+  script: client.py
+
+- url: /status
+  script: status.py
+
+- url: /admin
+  script: admin.py
+  
+- url: /settings
+  script: settings.py
+
+- url: /js
+  static_dir: js
+
+- url : /.*
+  script: index.py
+

@@ -1,0 +1,17 @@
+<html>
+  <body>
+   {% for value in mylist %}
+	   Accessing the page {{ value }} time <br>
+   {% endfor %}  
+  <br> count= {{ count }}
+      <blockquote>static value = {{staticvalue}}</blockquote>
+   <br>
+     path = {{ pathinfo }}
+
+  <br><br> Files:
+   {% for file in files %}
+	 {{file}} <br>
+   {% endfor %}
+  </body>
+</html>
+
