@@ -49,7 +49,7 @@ class AdminData():
 	
 	def get(self):
 		if not self.getStatus():
-			return "Application not yet initialized"
+			return "uninitialized"
 		
 		
 			
