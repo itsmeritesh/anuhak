@@ -68,6 +68,13 @@ class cache():
  		 	return False
  		 else:
  		 	return True
+ 		 
+ 	def incr(self,key):
+		data = memcache.incr(key,1)
+		if data is not None:
+ 			return data
+ 		else:
+ 			return None
  		 	
  		 	
  		
