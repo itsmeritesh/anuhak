@@ -3,7 +3,11 @@
  <title>Kahuna Settings</title>
 </head>
 <body>
- Dataset Name : 
-  	{{ dataset_name }}  
+ <form name="Settings" action="settings" method="get">
+ Dataset Name : <input type="text" name="dataset" value={{ dataset_name }}><br>
+ Number of Items in Cache : <input type="text" name="no_cache" value={{ no_items }}><br>
+
+<input type="submit" name="submit" value="Submit">
+</form>
 </body>
 </html>

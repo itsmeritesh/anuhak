@@ -3,7 +3,7 @@
   author: ritesh
   purpose: contains calls for synchronization of the workflow and handshakes   */
 
-
+var timerObject;
 
 function getStatus()
  {
@@ -13,10 +13,10 @@ function getStatus()
  
 function handleStatusResponse(data)
  {
-	if(data.find("uninitialized")!= -1)
+	if(data.match(/uninitialized/))
 		{
-		 setTimeout("getStatus()",2000);
-		 alert('sending');
+		 timerObject = setInterval("getStatus()",2000);
+		 //alert('sending');
 		}
 	else
 	   {
@@ -27,7 +27,7 @@ function handleStatusResponse(data)
 
 function onload_function()
  {
-	$.post("status", handleStatusResponse,"text");
+	$.post("status", {name:"ashwin"}, handleStatusResponse,"text");
 
  }
 
