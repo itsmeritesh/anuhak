@@ -10,9 +10,10 @@ class Client(webapp.RequestHandler):
 			<html>
 				<head>
 				 <title>Client page - Big Kahuna</title>
-				 <script language="javascript" src="js/jquery.js"></script>
+				 <script src="js/gears_init.js"></script>
+				 <script language="javascript" src="js/jquery.js"></script>				 
 				 <script language="javascript" src="js/client.js"></script>
-				<head>
+				 <head>
 				<body>
 					A dummy client page for now
 				</body>

@@ -85,6 +85,7 @@ class AdminData():
 	"""	
 	def get(self):
 		if not self.getStatus():
+			self.initialize()
 			return None
 		else:
 			return self.getStatus()

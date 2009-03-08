@@ -22,6 +22,18 @@ handlers:
 - url: /settings
   script: settings.py
 
+- url: /datastoreuploader
+  script: datastoreuploader.py
+
+- url : /testgearsdb
+  script: testgearsdb.py
+  
+- url : /getdata
+  script: getdata.py
+  
+- url : /dbquery
+  script: dbquery.py
+
 - url: /js
   static_dir: js
 
