@@ -3,11 +3,14 @@
  <title>Kahuna Settings</title>
 </head>
 <body>
+ <h4 style="color:blue"> Big Kahuna Settings </h4>
  <form name="Settings" action="settings" method="get">
- Dataset Name : <input type="text" name="dataset" value={{ dataset_name }}><br>
- Number of Items in Cache : <input type="text" name="no_cache" value={{ no_items }}><br>
+ <table>
+<tr><td align="right"> Dataset Name : <td align="left"> <input type="text" name="dataset" value={{ dataset_name }}><br>
+<tr><td align="right"> Number of Items in Cache :<td align="left"> <input type="text" name="no_cache" value={{ no_items }}><br>
 
-<input type="submit" name="submit" value="Submit">
+<tr colspan="2"><td align="center"> <input type="submit" name="submit" value="Submit">
+</table>
 </form>
 </body>
 </html>

@@ -1,0 +1,44 @@
+<html>
+  <head>
+	<title>jstest</title>
+	<script language="javascript" src="js/default.js"></script>
+  </head>
+  <body>
+	<table style="width:100%" cellpadding="0" cellspacing="0">
+	<tr>
+	<td style="width:80%" valign="top">
+	<h3>Administration Console</h3>
+	  Use this page to perform all kinds of administration activities on the Big Kahuna
+	  <ul>
+	  
+	  
+	  <!-- start the workflow -->
+	  <li>
+	    <font style="font-size:130%;color:blue">Start the workflow</font><br>
+	     Click the button below to start the big kahuna workflow. <br>
+	     <i>This assumes you have configured the application properly and there is at least one client</i><br>
+	    <form name="startappform" action="/admin" method="POST">
+	       <input type="hidden" name="startapp" value="true">
+	       &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="document.startappform.submit()" value="Start Workflow">
+	    </form>
+	  </li>
+	  
+	  
+	  <!-- view and change settings -->
+	  <li>
+	  <font style="font-size:130%;color:blue">View/Change Settings</font><br>
+	    &nbsp;&nbsp;&nbsp;&nbsp;<a href="settings">View/ Change Settings here </a>
+	  </li>
+	  
+	  </ul>	  
+	  
+	  
+	<!-- start of right hand side of the page -->
+	<td style="width:20%" valign="top">
+	 <div style="background-color:#d0d0d0" align="center">
+	  Application Status<br>
+	   <font style="color:blue"><b>{{status}}</b></font>
+	 </div>
+	</table>
+  </body>
+</html>

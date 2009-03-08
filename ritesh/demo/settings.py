@@ -14,7 +14,7 @@ class Settings(webapp.RequestHandler):
 	     settingsInCache = self.createSettings(settingsInCache)
 	     mycache.put("settings",settingsInCache)
              logging.error("added to cache")
-	     self.response.out.write("added to cache")
+	     self.response.out.write("Created and Read Settings. Please Reload the page to view/change settings")
 	     
         else:
             logging.error("item already in cache")

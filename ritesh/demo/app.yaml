@@ -25,6 +25,14 @@ handlers:
 - url: /js
   static_dir: js
 
+- url: /remote_api
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin
+
+- url: /admin/.*
+  script: $PYTHON_LIB/google/appengine/ext/admin
+  login: admin
+
 - url : /.*
   script: index.py
 
