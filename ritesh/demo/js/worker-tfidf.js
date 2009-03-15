@@ -6,6 +6,55 @@ var db;
 var debug = true;
 
 
+function Hash()
+{
+	this.length = 0;
+	this.items = new Array();
+	for (var i = 0; i < arguments.length; i += 2) {
+		if (typeof(arguments[i + 1]) != 'undefined') {
+			this.items[arguments[i]] = arguments[i + 1];
+			this.length++;
+		}
+	}
+   
+	this.removeItem = function(in_key)
+	{
+		var tmp_value;
+		if (typeof(this.items[in_key]) != 'undefined') {
+			this.length--;
+			var tmp_value = this.items[in_key];
+			delete this.items[in_key];
+		}
+	   
+		return tmp_value;
+	}
+
+	this.getItem = function(in_key) {
+		return this.items[in_key];
+	}
+
+	this.setItem = function(in_key, in_value)
+	{
+		if (typeof(in_value) != 'undefined') {
+			if (typeof(this.items[in_key]) == 'undefined') {
+				this.length++;
+			}
+
+			this.items[in_key] = in_value;
+		}
+	   
+		return in_value;
+	}
+
+	this.hasItem = function(in_key)
+	{
+		return typeof(this.items[in_key]) != 'undefined';
+	}
+}
+
+
+
+
 function init_db() {
 	if (google.gears) {
 		try {
@@ -22,6 +71,13 @@ function init_db() {
 	}
 
 }
+
+//delegate to run the sort for our objects
+function sortNumber(obj1,obj2)
+{
+    return  -(obj1.tfidf - obj2.tfidf);
+}
+
 
 
 function tfidf() {
@@ -40,35 +96,70 @@ function tfidf() {
 	var totaldocsrs = db.execute('select count(*) from Input');        
 	var totaldocs = parseInt(totaldocsrs.field(0));
 
-	var rs=db.execute('select * from Input');
-	
+	//populate the tdht for term doc reference
+	var tdht = new Hash();
+	var currentDocument =0;
+
+	var rs=db.execute('select * from Input');	
+	while(rs.isValidRow()) {
+	   currentDocument ++;
+	   words=rs.field(1).split(" ");
+	     for(i=0;i<words.length;i++) {
+		     var word = words[i];
+			if(tdht.hasItem(word))
+			{
+			  if (tdht.getItem(word).currentDocument != currentDocument)			
+			    {
+				tdht.getItem(word).currentDocument = currentDocument;
+				tdht.getItem(word).docCount++;
+			     }
+			}
+			else
+			{
+				var object = {'currentDocument': currentDocument, 'docCount' :1};
+				tdht.setItem(word,object);
+			}
+		}
+	   rs.next();
+	 }
+
+	//populate term frequency
+	var rs=db.execute('select * from Input');	
 	while(rs.isValidRow()) {
 	      words=rs.field(1).split(" ");
-	      for(i=0;i<words.length;i++) {
-		      count=0;
-		      doccount=0;
-		      for(j=1;j<words.length;j++) {
-				if(words[i]==words[j])
-					count=count+1;
+		var tfht = new Hash();
+		//get term count into tfht	
+	       for(i=0;i<words.length;i++) {
+			if(tfht.hasItem(words[i])) {
+				var wc =tfht.getItem(words[i])+1;
+				tfht.removeItem(words[i]);
+				tfht.setItem(words[i],wc);
+			   }
+			else	
+				tfht.setItem(words[i],1);	    
 		      }
-		      tf=count/words.length;
-		    //  for(l=0;l<input.length;l++) {
-			
-			//	if(input[l].indexOf(words[i])!=-1) {
-			
-			//		doccount=doccount+1; }
-		    //  }
-		      var countrs=db.execute("select count(*) from (select * from Input where input like '%"+words[i]+"%') t");
-		      doccount=parseInt(countrs.field(0));		      
-		      idf=totaldocs/doccount;
-		    
-		      
-		      tfidf=tf*idf;
-		      //document.write("Tfidf of "+words[i]+" is "+tfidf);
-		      result+="Tfidf of "+words[i]+" is "+tfidf+"<br>";
-		      //document.write("<br>");
-		      db.execute('Insert into Termfreq values(?,?,?)',[words[i],rs.field(0),tfidf]);
-	      }
+	        //noramlize tf by dividing it by the number of terms in the document
+		 var toSort = new Array();
+		 for (var j in tfht.items) {
+			  var tf = tfht.getItem(j) / words.length ;			  
+			  tfidf = tf * (totaldocs / tdht.getItem(j).docCount );
+			  tfht.removeItem(j);
+			  tfht.setItem(j,tfidf);			  
+			  var obj = { 'word': j, 'tfidf': tfidf }
+			  toSort.push(obj);
+			}	
+		
+	   	  toSort.sort(sortNumber);
+		  var topcount =0;
+		  for(var count=0;count<toSort.length  ;count ++)
+		   {			
+			if(topcount <15) {
+		 	db.execute('Insert into Termfreq values(?,?,?)',[toSort[count].word,rs.field(0),toSort[count].tfidf]);			
+			topcount ++;
+			}
+			else break;
+		   }
+	      
 	      rs.next();
 	}
  	return;
@@ -83,8 +174,12 @@ function kahuna_mapFunction()
  } 
 kahuna_mapFunction();
 
+var errorMessage = "done"
+wp.onerror = function (object) {
+  errorMessage = object.message;
+ }
 wp.onmessage = function(a, b, message) {
    var result = "send result here";
    //var reply = message.body[0] + message.body[1] + "... " + message.body[2].helloWorld;
-   wp.sendMessage(result, message.sender);
+   wp.sendMessage(errorMessage, message.sender);
  } 

@@ -17,7 +17,7 @@
 
 //This function is called when the worker finishes execution and returns the results
 workerPool.onmessage = function(a, b, message) {
-  alert('Received message from worker ' + message.sender + ': \n' + message.body);
+  document.write('Received message from worker ' + message.sender + ': \n' + message.body);
   return;
 };
 
@@ -31,6 +31,8 @@ function kahuna_init()
 
 			if (db) {
 				  db.open('kahuna');
+				   db.execute('drop table if exists Input');
+				   db.execute('drop table if exists Termfreq');
 				  db.execute('create table if not exists Termfreq' + '(keyword text, docid integer,tfidf integer)');
 				  db.execute('create table if not exists Input' + '(id integer primary key,input longtext)');
 				  success = true;

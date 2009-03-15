@@ -45,6 +45,9 @@ handlers:
   script: $PYTHON_LIB/google/appengine/ext/admin
   login: admin
 
+- url: /index
+  script: index.py
+
 - url : /.*
   script: index.py
 
