@@ -11,7 +11,8 @@ class Client(webapp.RequestHandler):
 				<head>
 				 <title>Client page - Big Kahuna</title>
 				 <script src="js/gears_init.js"></script>
-				 <script language="javascript" src="js/jquery.js"></script>				 
+				 <script language="javascript" src="js/jquery.js"></script>	 
+ 				 <script language="javascript" src="js/master-tfidf.js"></script>
 				 <script language="javascript" src="js/client.js"></script>
 				 <head>
 				<body>

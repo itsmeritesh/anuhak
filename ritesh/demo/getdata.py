@@ -1,6 +1,6 @@
 import cgi
 from maploader import Maploader
-from admin import Admin
+from admin import AdminData
 from cachecontrol import cache
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -11,19 +11,19 @@ class GetData(webapp.RequestHandler):
     """
     
     def get(self):
-        maploader = Maploader("logs")
+        maploader = Maploader("blogs")
         map = maploader.getmap()        
         if not map:
-            admin = Admin()
+            admin = AdminData()
             admin.changeStatus("map")
         else:
             self.response.out.write(map.text)
 
     def post(self):
-        maploader = Maploader("logs")
+        maploader = Maploader("blogs")
         map = maploader.getmap() 
         if not map:
-            admin = Admin()
+            admin = AdminData()
             admin.changeStatus("map")
         else:
             self.response.out.write(map.text)    

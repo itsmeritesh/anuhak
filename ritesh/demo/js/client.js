@@ -6,6 +6,8 @@
 var timerObject;
 var db;
 
+
+
 function getStatus()
  {
   $.post("status", handleStatusResponse,"text");
@@ -15,45 +17,40 @@ function getStatus()
 function handleStatusResponse(data)
  {
 	if(data.match(/inactive/))
-	{
-		
-		 //alert('sending');
+	{		
+		 kahuna_onInactive();
 	}
 	else if(data.match(/dataload/))
 	{
-		$.post("getdata",function(data) { 
-			toput = data.replace(/@#/g,",");
-			db.execute('Insert into Map values(?,?)',[null,toput]);
-		},"text");
+		//clear the timer to stop the pinging behavior and wait for the dataload to finish
+		 if(timerObject!=null)
+			clearInterval(timerObject);
+		//call the dataload code
+		kahuna_onDataLoad();
+		//ping to see if status has changed. Sequentialize the pinging mechanism
+		getStatus();
 		
-		
+	}
+	else if(data.match(/map/)) {
+		kahuna_onMap();
 	}	
+	else if(data.match(/reduce/)) {
+		kahuna_onReduce();
+	}
 }
+
+
 
 
 function onload_function()
  {
-	timerObject = setInterval("getStatus()",5000);
+	//call the init function and then start pinging.
+	kahuna_init();	
+	timerObject = setInterval("getStatus()",500);
 	$.post("status", handleStatusResponse,"text");
 	var success = false;
+    
+ }
 
-	if (google.gears) {
-		try {
-			db = google.gears.factory.create('beta.database');
-
-			if (db) {
-				  db.open('database-demo');
-				  db.execute('create table if not exists Map' + '(id integer primary key, map longtext)');
-
-				  success = true;
-			}
-
-		} catch (ex) {
-			//setError('Could not create database: ' + ex.message);
-			alert('Could not create database: ' + ex.message);
-		}
-	}	
-}
-
-
+//start the execution of this logic engine 
 onload_function();

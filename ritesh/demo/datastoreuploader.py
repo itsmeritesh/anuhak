@@ -7,7 +7,8 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 class DataStoreUploader(webapp.RequestHandler):
     def get(self):
-        uploaderObject = uploader("logs")
+        #uploaderObject = uploader("logs")
+        uploaderObject = uploader("blogs")
         uploaderObject.makecsv()
         self.response.out.write("Finished uploading Logs into the datastore")
 
