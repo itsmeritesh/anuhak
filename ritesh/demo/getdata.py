@@ -1,4 +1,5 @@
 import cgi
+from maptokenmanager import maptokenmanager
 from maploader import Maploader
 from admin import AdminData
 from cachecontrol import cache
@@ -11,22 +12,34 @@ class GetData(webapp.RequestHandler):
     """
     
     def get(self):
-        maploader = Maploader("blogs")
-        map = maploader.getmap()        
-        if not map:
-            admin = AdminData()
-            admin.changeStatus("map")
-        else:
-            self.response.out.write(map.text)
-
-    def post(self):
+        clientCookie = self.request.cookies.get('BigKahuna', '')
         maploader = Maploader("blogs")
         map = maploader.getmap() 
+        
+        #add to maptokenmapping
+        mtmanager = maptokenmanager()
+        #mtmanager.putMapToken(map,clientCookie)
+        
+        if not map:
+            admin = AdminData()
+            admin.changeStatus("map")
+        else:            
+            self.response.out.write("{ \"data\": \"" + map.text +"\", \"id\":" + str(map.uniqueid) + "}")
+
+    def post(self):
+        clientCookie = self.request.cookies.get('BigKahuna', '')
+        maploader = Maploader("blogs")
+        map = maploader.getmap() 
+        
+        #add to maptokenmapping
+        mtmanager = maptokenmanager()
+        #mtmanager.putMapToken(map,clientCookie)
+        
         if not map:
             admin = AdminData()
             admin.changeStatus("map")
         else:
-            self.response.out.write(map.text)    
+            self.response.out.write("{ \"data\": \"" + map.text +"\", \"id\":" + str(map.uniqueid) + "}")    
 
 
 application = webapp.WSGIApplication(

@@ -34,7 +34,8 @@ function kahuna_init()
 				   db.execute('drop table if exists Input');
 				   db.execute('drop table if exists Termfreq');
 				  db.execute('create table if not exists Termfreq' + '(keyword text, docid integer,tfidf integer)');
-				  db.execute('create table if not exists Input' + '(id integer primary key,input longtext)');
+				 // db.execute('create table if not exists Input' + '(id integer primary key,input longtext)');
+  	     			db.execute('create table if not exists Input' + '(id integer,input longtext)');
 				  success = true;
 			}
 
@@ -76,8 +77,8 @@ function kahuna_onInactive()
 function kahuna_onDataLoad()
 {             
 		$.post("getdata",function(data) { 
-			toput = data.replace(/@#/g,",");
-			db.execute('Insert into Input values(?,?)',[null,toput]);
+			var obj = eval('(' + data + ')');
+			db.execute('Insert into Input values(?,?)',[obj.id,obj.data]);
 		},"text");
 }
 

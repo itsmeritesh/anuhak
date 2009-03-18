@@ -41,7 +41,7 @@ class Maploader:
             mapstore = CacheMapStore(self.type,self.number_items,"Map",self.mycache.get("mapoffset"))
             self.mycache.replace("store",mapstore.maplist)
             self.mycache.replace("mappos",0)
-            maplist=mapstore.maplist
+            maplist=mapstore.maplist            
             pos = 0
         #print pos
         try:
