@@ -12,11 +12,13 @@ class Client(webapp.RequestHandler):
 				 <title>Client page - Big Kahuna</title>
 				 <script src="js/gears_init.js"></script>
 				 <script language="javascript" src="js/jquery.js"></script>	 
- 				 <script language="javascript" src="js/master-tfidf.js"></script>
+ 				 <script language="javascript" src="js/master-log.js"></script>
 				 <script language="javascript" src="js/client.js"></script>
 				 <head>
 				<body>
-					A dummy client page for now
+					Client page
+					<div id="logwindow">Debug Window:</div>
+					<a name="bottom" id="bottom"></a>
 				</body>
 			</html>""")
 			

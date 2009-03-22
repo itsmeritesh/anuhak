@@ -20,8 +20,17 @@ class uploader:
 		pathname = path
 		
    	def onlyascii(self,char):
-   		if ord(char) < 48 or ord(char) > 127: return ''
-   		else: return char
+   		#35 = #  , 44 = comma , 34 = "
+   		if ord(char)==34 or ord(char)==44 or ord(char)==35:
+   			return char
+   		#if ord(char)==44:
+   		#	return char
+   		#if ord(char)==35 :
+   		#	return char
+   		if ord(char) < 48 or ord(char) > 127:
+   			return ''
+   		else:
+   			return char
 
 	def makecsv(self):
 		"""iterates through each file in the folder and puts it into toupload.csv
@@ -43,11 +52,11 @@ class uploader:
 		        finalcontent=""
 		        for word in content.split():
                 		finalcontent = finalcontent +" " + filter(self.onlyascii,word)
-			content=finalcontent
+			content=finalcontent.replace("\"","@")
 			#oneline = str(count)+","+"logs"+","+content.strip().replace(",","@#")+","+filename
 			map = Map(uniqueid=count,
 			dataset_name="blogs",
-			text=str(content.replace(",","@#")),
+			text=str(content),
 			filename=filename)
 			map.put()
 			#file.write(oneline+"\n")

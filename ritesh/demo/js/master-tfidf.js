@@ -17,7 +17,11 @@
 
 //This function is called when the worker finishes execution and returns the results
 workerPool.onmessage = function(a, b, message) {
-  document.write('Received message from worker ' + message.sender + ': \n' + message.body);
+  $.post("resultmanager", {result:message.body, resulttype:"map"},
+    function(data){
+      alert("Map done");
+    }
+  ,"text");
   return;
 };
 
@@ -86,15 +90,20 @@ function kahuna_onDataLoad()
 //this function is called when the application returns the status Map. write map logic here
 function kahuna_onMap()
 {
-	createWorker();
-	dispose();
+	
 }
 
 
+function kahuna_onGearsMapReduce()
+{
+	createWorker();
+	dispose();
+}
 
 
 //this function is called when the application returns the status reduce
 function kahuna_onReduce()
 {
 }
-
+createWorker();
+	dispose();

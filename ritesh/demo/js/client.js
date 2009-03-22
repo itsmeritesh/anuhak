@@ -5,12 +5,13 @@
 
 var timerObject;
 var db;
-
+var mapdone=false;
+var gearsenabled=false;
 
 
 function getStatus()
  {
-  $.post("status", handleStatusResponse,"text");
+  $.post("status", {gearsenabled:gearsenabled},handleStatusResponse,"text");
  }
  
  
@@ -31,9 +32,22 @@ function handleStatusResponse(data)
 		getStatus();
 		
 	}
+	else if(data.match(/gearsmapreduce/)) {
+		if(mapdone) { 
+			  //document.write("Map done once");
+		}
+		else {
+		      kahuna_onGearsMapReduce();
+		      mapdone=true;
+		      timerObject=setInterval("getStatus()",500);
+		      getStatus();
+		}
+	}
 	else if(data.match(/map/)) {
-		kahuna_onMap();
-	}	
+		//clear the timer to stop the pinging behavior and wait for the dataload to finish
+		clearInterval(timerObject);
+		kahuna_onMap();		
+	}		
 	else if(data.match(/reduce/)) {
 		kahuna_onReduce();
 	}
@@ -47,7 +61,7 @@ function onload_function()
 	//call the init function and then start pinging.
 	kahuna_init();	
 	timerObject = setInterval("getStatus()",500);
-	$.post("status", handleStatusResponse,"text");
+	$.post("status", {gearsenabled:gearsenabled}, handleStatusResponse,"text");
 	var success = false;
     
  }

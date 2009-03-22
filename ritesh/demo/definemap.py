@@ -7,8 +7,7 @@ class Map(db.Model):
   text = db.TextProperty()
   filename = db.StringProperty(required=True)
   
-class Maplet:
-  
+class Maplet:  
   uniqueid = None
   dataset_name = None
   dated = None

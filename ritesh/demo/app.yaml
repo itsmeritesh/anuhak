@@ -25,6 +25,9 @@ handlers:
 - url: /datastoreuploader
   script: datastoreuploader.py
 
+- url: /resultmanager
+  script: resultmanager.py
+
 - url : /testgearsdb
   script: testgearsdb.py
   

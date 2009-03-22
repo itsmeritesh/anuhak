@@ -60,6 +60,11 @@ function kahuna_onDataLoad()
   
 }
 
+//this function is called when the application returns gearsMapReduce
+function kahuna_onGearsMapreduce()
+{
+
+}
 
 //this function is called when the application returns the status Map. write map logic here
 function kahuna_onMap()
