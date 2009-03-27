@@ -14,30 +14,51 @@ class GetData(webapp.RequestHandler):
     def get(self):
         clientCookie = self.request.cookies.get('BigKahuna', '')
         maploader = Maploader("blogs")
-        map = maploader.getmap() 
+        map = maploader.getmap()         
         
         #add to maptokenmapping
         mtmanager = maptokenmanager()
         #mtmanager.putMapToken(map,clientCookie)
+        workflow_type = self.getWorkflowType()
         
         if not map:
             admin = AdminData()
-            admin.changeStatus("map")
-        else:            
-            self.response.out.write("{ \"data\": \"" + map.text +"\", \"id\":" + str(map.uniqueid) + "}")
+            if workflow_type=="gears":
+            	admin.changeStatus("gearsmapreduce")
+            else:
+            	admin.changeStatus("reduce")
+        else:
+            self.response.out.write("{ \"data\": \"" + map.text +"\", \"id\":" + str(map.uniqueid) + "}")    
 
+
+    """
+    gets the workflow type from the settings file
+    """
+    def getWorkflowType(self):    	
+    	mycache = cache()
+    	if not mycache.get("settings"):
+		settingsInCache = SettingsInCache()
+	else:
+		settingsInCache = mycache.get("settings")
+	workflow_type = settingsInCache.type_of_workflow
+	return workflow_type
+		
     def post(self):
         clientCookie = self.request.cookies.get('BigKahuna', '')
         maploader = Maploader("blogs")
-        map = maploader.getmap() 
+        map = maploader.getmap()         
         
         #add to maptokenmapping
         mtmanager = maptokenmanager()
         #mtmanager.putMapToken(map,clientCookie)
+        workflow_type = self.getWorkflowType()
         
         if not map:
             admin = AdminData()
-            admin.changeStatus("map")
+            if workflow_type=="gears":
+            	admin.changeStatus("gearsmapreduce")
+            else:
+            	admin.changeStatus("reduce")
         else:
             self.response.out.write("{ \"data\": \"" + map.text +"\", \"id\":" + str(map.uniqueid) + "}")    
 

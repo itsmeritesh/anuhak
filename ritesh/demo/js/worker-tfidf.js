@@ -155,6 +155,7 @@ function tfidf() {
 		   {			
 			if(topcount <15) {
 		 	db.execute('Insert into Termfreq values(?,?,?)',[toSort[count].word,rs.field(0),toSort[count].tfidf]);			
+			result+=toSort[count].word+":"+rs.field(0)+":"+toSort[count].tfidf;
 			topcount ++;
 			}
 			else break;
@@ -179,7 +180,7 @@ wp.onerror = function (object) {
   errorMessage = object.message;
  }
 wp.onmessage = function(a, b, message) {
-   var result = "send result here";
+   //var result = "send result here";
    //var reply = message.body[0] + message.body[1] + "... " + message.body[2].helloWorld;
-   wp.sendMessage(errorMessage, message.sender);
+   wp.sendMessage(result, message.sender);
  } 

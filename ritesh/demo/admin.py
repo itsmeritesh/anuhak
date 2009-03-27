@@ -1,5 +1,6 @@
 import cgi,os
 from cachecontrol import cache
+from settings import SettingsInCache
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp import template
@@ -18,9 +19,18 @@ class Admin(webapp.RequestHandler):
 	
 	def post(self):
 		admin = AdminData()
+		mycache = cache()
+		if not mycache.get("settings"):
+			settingsInCache = SettingsInCache()
+		else:
+			settingsInCache = mycache.get("settings")
+		workflow_type = settingsInCache.type_of_workflow
 		startapp = self.request.get('startapp')
 		if startapp!= None:
-			admin.changeStatus("dataload")
+			if workflow_type=="gears":
+				admin.changeStatus("dataload")
+			else:
+				admin.changeStatus("map")
 			self.response.out.write("<div style='background-color:yellow'> Application Started</div>")
 		path = os.path.join(os.path.dirname(__file__), 'templates/admin.html')
 		adminSettings ={}
