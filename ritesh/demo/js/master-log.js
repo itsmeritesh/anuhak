@@ -23,7 +23,7 @@ var finalcount=0;
 var sumReduce;
 var log1=new Array();
 var startPosition;
-var logFlag=true;
+var logFlag=false;
 /****************************************
   End Section variables
 ****************************************/
@@ -87,6 +87,15 @@ function sendResults() {
 //this function is called when the application returns the status reduce
 function kahuna_onReduce()
 {
+              $.post("getreduce",function(data) { 
+			log("reduce received data =" + data);
+			var obj = eval('[' + data + ']');
+			//id = obj.id;
+			//var str = obj.data.replace(/@/g,"\"");
+			
+			jsarray=obj
+			reduce_counts();
+		},"json");
 }
 
 
@@ -215,7 +224,7 @@ function getPatterns(){
 
 	}
 	
-	
+	/* the reduce function in our case */
 	 function reduce_counts()
 	 {
 	 	var sum=0;
@@ -225,6 +234,11 @@ function getPatterns(){
 		}
 		log("sum =" + sum);
 		sumReduce=sum;
+
+		$.post("resultmanager",{result:sumReduce,resultType:"reduce"},function(data) { 
+		      log("reduce results sent" + data);
+			},"text");
+	getStatus();
 	 }
 
 function log(toappend)

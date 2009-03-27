@@ -27,15 +27,15 @@ class reducemanager:
 
    mycache = None
 
-   def __init__(self,number):
+   def __init__(self):
        self.mycache = cache()
 
 
    def getreduceitems(self,number):
        returnlist = []
        templist=self.mycache.get("resultlist")
-       if len(templist) == 0:
-           self.mycache.delete("resultlist")
+       if len(templist) == 1:
+           #self.mycache.delete("resultlist")
            returnlist = None
            return returnlist
            #list is empty

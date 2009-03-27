@@ -14,7 +14,11 @@ class resultmanager(webapp.RequestHandler):
       result = self.request.get('result')
       reduceQueue = reducequeue()
       reduceQueue.put(clientCookie,result)
-      logging.info("Map result received" + resultType + ":" + result)
+      if resultType=="map":
+      	logging.info("Map result received" + resultType + ":" + result)
+      else:
+      	logging.info("Reduce result received:" + result) 
+      	
 
       
 

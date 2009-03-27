@@ -33,9 +33,15 @@ handlers:
   
 - url : /getdata
   script: getdata.py
-  
+
+- url: /getreduce
+  script: getreduce.py
+
 - url : /dbquery
   script: dbquery.py
+
+- url: /mapview
+  script: mapviewer.py
 
 - url: /js
   static_dir: js
