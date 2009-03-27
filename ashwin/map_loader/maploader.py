@@ -52,3 +52,8 @@ class Maploader:
         self.mycache.replace("mappos",pos)
         return item
             
+    def cleanup(self):
+        self.mycache.delete("store")
+        self.mycache.delete("mappos")
+        self.mycache.delete("mapoffset")
+        self.mycache.delete("mapcount")
