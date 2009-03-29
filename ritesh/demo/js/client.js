@@ -60,8 +60,11 @@ function onload_function()
  {
 	//call the init function and then start pinging.
 	kahuna_init();	
-	timerObject = setInterval("getStatus()",500);
-	$.post("status", {gearsenabled:gearsenabled}, handleStatusResponse,"text");
+ 	timerObject = setInterval("getStatus()",500);
+	$.post("setgears", {gearsenabled:gearsenabled}, function(data) { 
+	      
+	},"text");
+ 	$.post("status", {gearsenabled:gearsenabled}, handleStatusResponse,"text");
 	var success = false;
     
  }

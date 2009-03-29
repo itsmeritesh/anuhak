@@ -76,7 +76,7 @@ class AdminData():
 	def getStatus(self):
 		cc = cache()	
 		admin_object = cc.get("admin_data")
-		if not admin_object:
+		if admin_object == None:
 			return None
 		else:
 			return admin_object.currentStatus

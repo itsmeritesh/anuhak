@@ -50,7 +50,7 @@ class GetData(webapp.RequestHandler):
         
         #add to maptokenmapping
         mtmanager = maptokenmanager()
-        #mtmanager.putMapToken(map,clientCookie)
+        mtmanager.putMapToken(map,clientCookie)
         workflow_type = self.getWorkflowType()
         
         if not map:

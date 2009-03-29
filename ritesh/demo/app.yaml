@@ -37,6 +37,12 @@ handlers:
 - url: /getreduce
   script: getreduce.py
 
+- url: /setgears
+  script: setgears.py
+
+- url : /resourcemanager
+  script: resourcemanager.py
+
 - url : /dbquery
   script: dbquery.py
 

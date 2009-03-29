@@ -10,7 +10,8 @@ class reducequeue:
 
    def __init__(self):
        self.reduce_cache = cache()
-       self.reduce_cache.put("resultlist",self.reducelist)
+       if not self.reduce_cache.get("resultlist"):
+       		self.reduce_cache.put("resultlist",self.reducelist)
 
    def put(self,id,resultdata):
        result = resultlet()

@@ -1,35 +1,20 @@
-import cgi
+import cgi,os
 from google.appengine.ext import webapp
-from cachecontrol import cache
+from showstatus import status
 from google.appengine.ext.webapp.util import run_wsgi_app
+from google.appengine.ext.webapp import template
 
 class Mapviewer(webapp.RequestHandler):
 	def get(self):
-		
-		self.response.out.write("""
-			<html>
-				<head>
-				 <title>Viewer - Big Kahuna</title>
-				 </head>
-				<body>""")
-		
-
-                mycache = cache()
-                maplist = mycache.get("store")
-                self.response.out.write("Map store has: "+ str(len(maplist)) +"maps")
-                resultlist = mycache.get("resultlist")
-                self.response.out.write("Result store has: "+ str(len(resultlist)) +"results")
-                self.response.out.write("<hr>")
-                for i in range(0,len(maplist)-1):
-                    map = maplist[i]
-                    self.response.out.write("map id = "+str(map.uniqueid)+data +"\n" +map.text)
-                    for j in range(0,len(resultlist)-1):
-                        result=resultlist(i)
-                        if (str(map.uniqueid) == int(result.token)):
-                            self.response.out.write("result is "+ "\n" +result.data)
-                self.response.out.write("""					
-				</body>
-			</html>""") 
+		values={}	
+		curstatus = status()
+		values['datastoremapcount'] = curstatus.datstoremapcount()
+		values['currentmapcount'] = curstatus.currentmapcount()
+		values['resultcount'] = curstatus.resultcount()
+		values['status'] = curstatus.whatsgoinon()
+		values['lastresult'] = curstatus.resultobject()
+		path = os.path.join(os.path.dirname(__file__), 'templates/mapview.html')
+                self.response.out.write(template.render(path, values))
                 
 
 application = webapp.WSGIApplication(

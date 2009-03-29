@@ -18,12 +18,10 @@ class datatokenpair:
     def getToken(self):
         return self.token 
 
-class client:
+class clientTokenMap:
     token=-1
-    maps=[]
-    
-    def addMap(self,mapId):
-        maps.append(mapId)
+    maps=""
+        
     
 
 class maptokenmanager:
@@ -33,8 +31,11 @@ class maptokenmanager:
     
     def __init__(self):
         mycache = cache()
-        if not mycache.get("maptokenmanager"):
-            mycache.put("maptokenmanager",self)        
+        dic = mycache.get("maptokenmanager")
+        if  dic== None:
+	    mapTokenMapping = {}        	
+            mycache.put("maptokenmanager",mapTokenMapping)
+            logging.info("added maptoken manager to cache")
                 
         if not mycache.get("settings"):
              settingsInCache = SettingsInCache()
@@ -42,32 +43,38 @@ class maptokenmanager:
             settingsInCache = mycache.get("settings")
         workflow_type = settingsInCache.type_of_workflow
              
-        
+    def requeueForToken(self,inMap):
+    	ml=maploader()
+    	ml.map = inMap
+    	logging.info("requeueing map for some token")
+    	#ashwins new function    	
+    	
     def removeMapToken(self,inToken):
         mycache = cache()
-        dict = mycache.get("maptokenmanager").mapTokenMapping
-        if not dict:
+        dic = mycache.get("maptokenmanager")
+        if not dic:
             logging.error("maptokenmanager not found in removeMapToken")
-        if(dict.has_key(inToken)):
-            dict.pop(inToken)
-            mycache.replace("maptokenmanager",self)
+        if(dic.has_key(inToken)):
+            dic.pop(inToken)
+            mycache.replace("maptokenmanager",dic)
             
     
     def putMapToken(self,inMap,inToken):
         mycache = cache()
-        dict = mycache.get("maptokenmanager").mapTokenMapping
-        if not dict:
-            logging.error("maptokenmanager not found in removeMapToken")
-        if dict.has_key(inToken):
-            existingClient = dict[inToken]
-            existingClient.addMap(inMap)
+        dic = mycache.get("maptokenmanager")
+        if  dic==None:
+            logging.error("maptokenmanager not found in putMapToken")
+        if dic.has_key(inToken):
+            existingClient = dic.pop(inToken)
+            self.requeueForToken(existingClient.map)
+            dic[inToken]=inMap        
                                     
         else:
-            newClient = client()
+            newClient = clientTokenMap()
             newClient.token = inToken
-            newClient.addMap(inMap)
-            dict[inToken] = newClient
-        mycache.replace("maptokenmanager",self)
+            newClient.map= inMap
+            dic[inToken] = newClient
+        mycache.replace("maptokenmanager",dic)
         
 
         

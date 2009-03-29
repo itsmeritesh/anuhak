@@ -77,7 +77,7 @@ function kahuna_onGearsMapReduce() {
 
 function sendResults() {
 	$.post("resultmanager",{result:finalcount,id:id,resultType:"map"},function(data) { 
-	      log("results sent" + data);
+	      log("results sent" + data);	      
 	},"text");
 	getStatus();
 }
@@ -105,10 +105,19 @@ function kahuna_onReduce()
 
 //log crunching here
 
+	  function reset()
+	 {
+		for(var i=0;i<result.length;i++) {
+		result[i]="";
+		}
+		resultString="List=";
+		result="";
+	}
 	
 	function log_cruncher()
 	 {	
-		
+		reset();
+
 		for(iterator=0;iterator<64;iterator++){
 		     board[iterator]="*";
 		}
@@ -162,7 +171,7 @@ function kahuna_onReduce()
 			}
 		}	
 	     if(finalcount>1) 
-		console.log("Final COunt =" + finalcount);
+		log("Final COunt =" + finalcount);
 	     log("Find pattern returned :" + finalcount);
 	    
 	 }

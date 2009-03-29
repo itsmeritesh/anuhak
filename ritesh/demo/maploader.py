@@ -52,3 +52,20 @@ class Maploader:
         self.mycache.replace("mappos",pos)
         return item
             
+    def cleanup(self):
+        self.mycache.delete("mappos")
+        self.mycache.delete("store")
+        self.mycache.delete("mapcount")
+        self.mycache.delete("mapoffset")
+
+    def addmap(self,newmaplet):
+        maplist = self.mycache.get("store")
+        try:
+            maplist.append(newmaplet)
+        except:
+            logging.info("Something failed while appending to maplist")
+            return 0
+        self.mycache.replace("store",maplist)
+        self.mycache.replace("mapcount",self.mycach.get("mapcount")+1)
+        return 1
+        

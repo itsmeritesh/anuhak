@@ -1,9 +1,16 @@
 import cgi
+import os
 from google.appengine.ext import webapp
 from cachecontrol import cache
 from google.appengine.ext.webapp.util import run_wsgi_app
+from google.appengine.ext import db
+import logging
 
 class Client(webapp.RequestHandler):
+
+	
+	
+
 	def get(self):
 		self.checkCookie(self.request,self.response)
 		self.response.out.write("""
@@ -23,31 +30,55 @@ class Client(webapp.RequestHandler):
 			</html>""")
 			
 	def checkCookie(self,request,response):
-		    """ Get the IP address and cookie of app from the http request object """
-		    ipAddress = request.remote_addr
-		    clientCookie = request.cookies.get('BigKahuna', '')
-		    cc = cache()
-		    """ create a unique key value pair to track max value of cookie set """
-		    cookieKey = "cookieKey"
-		    cookieValue = cc.get(cookieKey)
-		    """ If that key value pair doesnt exist, create one and set it to zero """
-		    if cookieValue == None:
-		    	cc.put(cookieKey,0)
-		    	cookieValue = 0
-		    """ If client cookie isnt set, increment max value by one and set it as the cookie in the response object """  
-		    if clientCookie == "":
-		    	cookieValue = cc.incr(cookieKey)
-		    	cc.put(ipAddress,cookieValue)
-		    	response.headers.add_header('Set-Cookie', 'BigKahuna='+str(cookieValue)+'; expires=Fri, 31-Dec-2020 23:59:59 GMT')	
-		    	""" Client cookie is also set. Place to send map/reduce/app status. Currently doing nothing """
-		    else:
-		    	response.out.write("Nothing Doing")
 
+		clientlist = []
+		cc = cache()
+		templist = cc.get("clientlist")
+		if templist == None:
+		    cc.put("clientlist",clientlist)
+		    logging.info("created client list")
+
+		clientCookie = request.cookies.get('BigKahuna', '')
+
+
+		""" create a unique key value pair to track max value of cookie set """
+		cookieKey = "cookieKey"
+		cookieValue = cc.get(cookieKey)
+		""" If that key value pair doesnt exist, create one and set it to zero """
+		if cookieValue == None:
+		    cc.put(cookieKey,0)
+		    cookieValue = 0
+		    logging.info("created cookie counter")
+		""" If client cookie isnt set, increment max value by one and set it as the cookie in the response object """  
+		if clientCookie == "":
+
+		    resource = Resource()
+		    resource.ip = request.remote_addr
+		    resource.clienttype = os.environ['HTTP_USER_AGENT']
+		    resource.cookie = cc.incr(cookieKey)
+		    logging.info("created resource object")
+		    clientlist = cc.get("clientlist")
+		    clientlist.append(resource)
+		    cc.replace("clientlist",clientlist)
+		    logging.info("replaced client list")  
+		    response.headers.add_header('Set-Cookie', 'BigKahuna='+str(resource.cookie)+'; expires=Fri, 31-Dec-2020 23:59:59 GMT')	
 		    response.out.write('Hello, webapp World!')
-		    response.out.write("Cookie:" + clientCookie)
-		    response.out.write("IP:" + ipAddress)
+		    response.out.write("Cookie:" + str(resource.cookie))
+		    response.out.write("IP:" + resource.ip)
+		    response.out.write("IP:" + resource.clienttype)
+
+		else:
+		    response.out.write("Nothing Doing")
+
+		    
 		
 		
+
+class Resource:
+	cookie = None
+	ip = None
+	clienttype = None
+	gearsenabled = None
 
 
 
