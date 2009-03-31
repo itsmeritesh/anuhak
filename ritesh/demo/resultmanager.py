@@ -22,11 +22,12 @@ class resultmanager(webapp.RequestHandler):
         mtm.removeMapToken(clientCookie)
       	logging.info("Map result received" + resultType + ":" + result)
       else:
-      	mycache = cache()
-        curresult = int(mycache.get("reduceresult"))
+      	mycache = cache()      	
+        curresult =mycache.get("reduceresult")
         if curresult == None:
         	mycache.put("reduceresult",result)
         else:
+	       	curresult = int(curresult)
         	curresult = result + curresult 
         	mycache.replace("reduceresult",curresult)
         	

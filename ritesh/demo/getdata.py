@@ -48,10 +48,12 @@ class GetData(webapp.RequestHandler):
         maploader = Maploader("blogs")
         map = maploader.getmap()         
         
-        #add to maptokenmapping
-        mtmanager = maptokenmanager()
-        mtmanager.putMapToken(map,clientCookie)
+        #add to maptokenmapping if type is non gears
         workflow_type = self.getWorkflowType()
+        if workflow_type=="pure":
+        	mtmanager = maptokenmanager()
+        	mtmanager.putMapToken(map,clientCookie)
+
         
         if not map:
             admin = AdminData()

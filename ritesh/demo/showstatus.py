@@ -27,7 +27,10 @@ class status:
     def resultcount(self):
     	self.mycache = cache()
         resultlist =self. mycache.get("resultlist")
-        return len(resultlist)
+        if resultlist== None:
+        	return 0
+        else:
+        	return len(resultlist)
     
 
     def whatsgoinon(self):
@@ -42,7 +45,10 @@ class status:
         #returns latest result
         self.mycache = cache()
         reslist = self.mycache.get("resultlist")
-        return reslist[-1].data
+        if reslist == None:
+        	return ""
+        else:
+        	return reslist[-1].data
 
 
         
