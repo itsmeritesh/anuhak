@@ -25,11 +25,17 @@ class resultmanager(webapp.RequestHandler):
       	mycache = cache()      	
         curresult =mycache.get("reduceresult")
         if curresult == None:
-        	mycache.put("reduceresult",result)
+        	if result.isdigit()==True:
+        		mycache.put("reduceresult",result)
         else:
-	       	curresult = int(curresult)
-        	curresult = result + curresult 
-        	mycache.replace("reduceresult",curresult)
+        	try:
+        			logging.info(" Reduceresult is not null")
+        		#if result.isdigit()==True and int(result)!=0:
+        			curresult = int(curresult)
+        			curresult = int(result) + curresult 
+        			mycache.replace("reduceresult",curresult)
+        	except:
+        		logging.info("exception in ResultManager.py ")
         	
       	logging.info("Reduce result received:" + result) 
       	

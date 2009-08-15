@@ -46,7 +46,7 @@ class Settings(webapp.RequestHandler):
     	    
         if not type_of_workflow:
         	if settingsInCache.type_of_workflow=="":
-        		settingsInCache.set_type_of_workflow("gears")
+        		settingsInCache.set_type_of_workflow("pure")
         else:
             settingsInCache.set_type_of_workflow(type_of_workflow)         
          

@@ -44,11 +44,11 @@ class status:
     def resultobject(self):
         #returns latest result
         self.mycache = cache()
-        reslist = self.mycache.get("resultlist")
+        reslist = self.mycache.get("reduceresult")
         if reslist == None:
-        	return ""
+        	return "0"
         else:
-        	return reslist[-1].data
+        	return reslist
 
 
         

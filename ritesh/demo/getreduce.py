@@ -22,7 +22,7 @@ class GetReduce(webapp.RequestHandler):
 		
 	def post(self):
 		rm = reducemanager();
-		reducelist = rm.getreduceitems(100);
+		reducelist = rm.getreduceitems(30);
 		if not reducelist:
 			admin = AdminData()
 			admin.changeStatus('Complete')

@@ -68,8 +68,28 @@ class Client(webapp.RequestHandler):
 		    response.out.write("IP:" + resource.clienttype)
 
 		else:
-		    response.out.write("Nothing Doing")
-
+		    response.out.write("You have already visited us once")
+		    tlist = cc.get("clientlist")
+		    response.out.write("Cookie:" + clientCookie)
+		    response.out.write("IP:" + request.remote_addr)
+		    response.out.write("IP:" + os.environ['HTTP_USER_AGENT'])
+		    resource = Resource()
+		    resource.ip = request.remote_addr
+		    resource.clienttype = os.environ['HTTP_USER_AGENT']
+		    resource.cookie = clientCookie
+		    tlist.append(resource)
+		    cc.replace("clientlist",tlist)
+		    for obj in tlist:
+			  if obj == "":
+				if obj.cookie == int(clientCookie):
+				      logging,info("Details already in cache")
+				else:
+				      logging.info("Inside for in client")
+				      obj = resource
+				      tlist.remove(obj)
+				      tlist.append(obj)
+				      cc.replace("clientlist",tlist)
+				      logging.info("replaced client list")
 		    
 		
 		
